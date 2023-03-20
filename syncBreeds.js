@@ -1,15 +1,16 @@
-// data in memory
-const catBreeds = {
-  'Balinese': "The golden eyes and the shiny black coat of the Bombay is absolutely striking. Likely to bond most with one family member, the Bombay will follow you from room to room and will almost always have something to say about what you are doing, loving attention and to be carried around, often on his caregiver's shoulder.",
-  'Bombay': "The golden eyes and the shiny black coat of the Bombay is absolutely striking. Likely to bond most with one family member, the Bombay will follow you from room to room and will almost always have something to say about what you are doing, loving attention and to be carried around, often on his caregiver's shoulder."
+const fs = require("fs");
+
+const breedDetailsFromFile = function(breed) {
+  console.log("breedDetailsFromFile: Calling readFile...");
+  fs.readFile(`./data/${breed}.txt`,"utf8",(error,data) => {
+    console.log("In readFile's Callback: it has the data");
+    //ISSUE: Returning from *inner* callback funciton, not breedDetailsFromFile.
+    if (!error) return data;
+  });
+  // ISSUE: Attempting to return data out here will also not work.
+  //        Currently not returning anything from here, so breedDetailsFromFile function returns undefined.
 };
 
-// synchronous function to fetch a cat breed
-const breedDetails = function(breed) {
-  // can simply return it (easy peezee, butter squeezy) ...
-  return catBreeds[breed];
-};
-
-// get the return value right away from the function
-const bombay = breedDetails('Bombay');
-console.log(bombay); //=> prints out the description for that breed
+// we try to get the return value
+const bombay = breedDetailsFromFile('Bombay');
+console.log('Return Value: ', bombay); // => will NOT print out details, instead we will see undefined!
